@@ -1,0 +1,4 @@
+interface:
+  display_name: "AMESim Bridge"
+  short_description: "Run local AMESim models through the Codex bridge"
+  default_prompt: "Use my AMESim model with the Codex bridge"
