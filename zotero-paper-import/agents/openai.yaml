@@ -1,0 +1,4 @@
+interface:
+  display_name: "Zotero Paper Import"
+  short_description: "Import paper lists into Zotero via DOI/RIS workflows"
+  default_prompt: "把这批论文导入 Zotero，并尽量抓取可用 PDF。"
