@@ -9,6 +9,7 @@ This repository stores user-installed Codex skills for reuse across machines.
 - `superpowers` skills from `obra/superpowers`
 - Nature workflow skills
 - `zotero-paper-import`
+- `auto-backup-skills-to-github`
 - Shared reference files in `_shared`
 
 System skills from `.codex/skills/.system` are intentionally excluded because Codex provides them.

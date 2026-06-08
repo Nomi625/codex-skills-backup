@@ -1,0 +1,4 @@
+interface:
+  display_name: "Auto Backup Skills to GitHub"
+  short_description: "Back up newly created skills to the GitHub skills repository"
+  default_prompt: "创建或更新 skill 后，同步保存到我的 GitHub skills 备份仓库。"
