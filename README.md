@@ -10,6 +10,7 @@ This repository stores user-installed Codex skills for reuse across machines.
 - Nature workflow skills
 - `zotero-paper-import`
 - `auto-backup-skills-to-github`
+- `interactive-learning`
 - Shared reference files in `_shared`
 
 System skills from `.codex/skills/.system` are intentionally excluded because Codex provides them.
