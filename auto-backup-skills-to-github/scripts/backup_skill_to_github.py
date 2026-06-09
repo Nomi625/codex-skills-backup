@@ -5,7 +5,10 @@ import subprocess
 from pathlib import Path
 
 
-DEFAULT_SKILLS_ROOT = Path(r"C:\Users\Administrator\.codex\skills")
+DEFAULT_SKILLS_ROOTS = [
+    Path(r"C:\Users\Administrator\.codex\skills"),
+    Path(r"C:\Users\Administrator\.agents\skills"),
+]
 DEFAULT_REPO = Path(r"C:\Users\Administrator\Documents\codex-skills-backup")
 
 
@@ -16,13 +19,20 @@ def run(cmd, cwd=None, check=True):
     return result
 
 
-def copy_skill(skill_name, skills_root, repo):
+def find_skill(skill_name, skills_roots):
     if skill_name == ".system" or skill_name.startswith("."):
         raise ValueError("Refusing to back up system or hidden skill directories")
-    source = skills_root / skill_name
+    for skills_root in skills_roots:
+        source = skills_root / skill_name
+        if (source / "SKILL.md").exists():
+            return source
+    checked = ", ".join(str(root / skill_name) for root in skills_roots)
+    raise FileNotFoundError(f"Missing skill source. Checked: {checked}")
+
+
+def copy_skill(skill_name, skills_roots, repo):
+    source = find_skill(skill_name, skills_roots)
     target = repo / skill_name
-    if not (source / "SKILL.md").exists():
-        raise FileNotFoundError(f"Missing skill source: {source}")
     if target.exists():
         shutil.rmtree(target)
     ignore = shutil.ignore_patterns("__pycache__", "*.pyc", ".DS_Store")
@@ -48,21 +58,26 @@ def update_readme(skill_name, repo):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Copy a Codex skill into the GitHub backup repo.")
+    parser = argparse.ArgumentParser(description="Copy a Codex or agent skill into the GitHub backup repo.")
     parser.add_argument("--skill-name", required=True)
-    parser.add_argument("--skills-root", default=str(DEFAULT_SKILLS_ROOT))
+    parser.add_argument(
+        "--skills-root",
+        action="append",
+        default=None,
+        help="Skill root to search. Can be passed multiple times.",
+    )
     parser.add_argument("--repo", default=str(DEFAULT_REPO))
     parser.add_argument("--commit-message", default=None)
     parser.add_argument("--commit", action="store_true", help="Run git add/commit after copying")
     parser.add_argument("--push", action="store_true", help="Run git push after committing")
     args = parser.parse_args()
 
-    skills_root = Path(args.skills_root)
+    skills_roots = [Path(root) for root in args.skills_root] if args.skills_root else DEFAULT_SKILLS_ROOTS
     repo = Path(args.repo)
     skill_name = args.skill_name
     commit_message = args.commit_message or f"Add {skill_name} skill"
 
-    source, target = copy_skill(skill_name, skills_root, repo)
+    source, target = copy_skill(skill_name, skills_roots, repo)
     readme_changed = update_readme(skill_name, repo)
 
     print(f"Copied {source} -> {target}")
