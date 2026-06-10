@@ -40,6 +40,12 @@ The working validated command must run outside the Codex sandbox because Ansys l
    python C:\Users\Administrator\.codex\skills\ansys-fluent-driver\scripts\check_fluent.py --launch
    ```
 4. Report evidence, not assumptions: version printed, launch result, transcript errors, and whether Fluent exited cleanly.
+5. For real CFD work, prefer this progression:
+   - existing `.msh`/`.msh.h5` solver-only case first;
+   - then geometry + Fluent Meshing;
+   - then full parametric or automated report workflows.
+6. Before writing solver scripts, require the user or input files to define: geometry/mesh path, units, material, boundary conditions, turbulence model, target outputs, convergence criteria, and report format.
+7. For aircraft/external-flow cases, require a geometry axis audit before meshing: nose direction, flow direction, lift direction, drag direction, reference area, and AoA-corrected force vectors.
 
 ## Sandbox Rule
 
@@ -71,7 +77,10 @@ Do not claim Codex can drive Fluent until this smoke test has passed in the curr
 - Running PyFluent only inside the sandbox. Licensing initialization can fail even when the license server is healthy.
 - Letting user-level `ANSYS_ROOT` or `ANSYS_WB_EXE` point to Ansys 2022. Use explicit 2026 paths for automation.
 - Depending on Chinese or English GUI labels. Prefer PyFluent, TUI, journal files, and logs; UI language should not matter.
+- Accepting residual convergence alone. For force/thermal/pressure goals, monitor the engineering quantity and require it to stabilize.
+- Presenting browser plots, screenshots, or generated figures as Fluent results unless they are derived from exported Fluent data.
 
 ## References
 
 - Read `references/local-config.md` for current machine-specific facts and diagnostic commands.
+- Read `references/simulation-playbook.md` before running a real Fluent simulation, writing a simulation prompt, or reporting results.
