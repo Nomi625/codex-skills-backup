@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ansys Fluent Driver"
+  short_description: "Drive local Fluent via PyFluent"
+  default_prompt: "Check whether Codex can drive Ansys Fluent 2026, then run a PyFluent smoke test."
