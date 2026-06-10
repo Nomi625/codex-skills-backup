@@ -1,22 +1,28 @@
 ---
 name: auto-backup-skills-to-github
-description: Use when any Codex or agent skill has just been created, generated, edited, installed, downloaded, renamed, copied, or updated, especially after skill-creator, skill-installer, npx skills add, or manual skill changes.
+description: Use when any Codex or agent skill has just been created, generated, edited, installed, downloaded, renamed, copied, or updated, especially after skill-creator, skill-installer, npx skills add, or manual skill changes; also keep the Obsidian Skills管理 mirror current.
 ---
 
 # Auto Backup Skills to GitHub
 
 ## Overview
 
-After creating, generating, installing, or changing any non-system personal skill, mirror it into the user's GitHub backup repository and push a commit in the same turn. The default backup repo is:
+After creating, generating, installing, or changing any non-system personal skill, mirror it into the user's GitHub backup repository, mirror it into Obsidian, and push a commit in the same turn when GitHub is reachable. The default backup repo is:
 
 ```text
 C:\Users\Administrator\Documents\codex-skills-backup
 https://github.com/Nomi625/codex-skills-backup.git
 ```
 
+The default Obsidian mirror is:
+
+```text
+C:\Users\Administrator\Desktop\LabNotes\Skills管理
+```
+
 ## Trigger Rule
 
-When this skill is active and a skill is created, generated, installed, downloaded, edited, updated, renamed, or copied, do not stop after the skill lands locally. Back it up to GitHub in the same turn unless the user explicitly says not to copy, commit, or push.
+When this skill is active and a skill is created, generated, installed, downloaded, edited, updated, renamed, or copied, do not stop after the skill lands locally. Back it up to GitHub and copy it into the Obsidian `Skills管理` mirror in the same turn unless the user explicitly says not to copy, commit, or push.
 
 This includes skills installed by:
 
@@ -47,9 +53,11 @@ If the installed skill lands under `C:\Users\Administrator\.agents\skills` inste
 
 4. Add the skill name to `README.md` if the contents list does not already mention it.
 
-5. Review the diff. Only commit the copied skill and intentional README changes.
+5. Copy the same skill folder into `C:\Users\Administrator\Desktop\LabNotes\Skills管理\<skill-name>` and regenerate `Skills管理\README.md` as the Obsidian index.
 
-6. Commit and push unless the user explicitly asked not to:
+6. Review the diff. Only commit the copied skill and intentional README changes.
+
+7. Commit and push unless the user explicitly asked not to:
 
    ```powershell
    git add README.md <skill-name>
@@ -57,11 +65,12 @@ If the installed skill lands under `C:\Users\Administrator\.agents\skills` inste
    git push origin master
    ```
 
-7. Report the commit hash and GitHub URL:
+8. Report the commit hash, GitHub URL, and Obsidian mirror path:
 
    ```text
-   https://github.com/Nomi625/codex-skills-backup/tree/master/<skill-name>
-   ```
+https://github.com/Nomi625/codex-skills-backup/tree/master/<skill-name>
+C:\Users\Administrator\Desktop\LabNotes\Skills管理\<skill-name>
+```
 
 ## Script
 
@@ -71,7 +80,7 @@ Use `scripts/backup_skill_to_github.py` for the standard case:
 python scripts\backup_skill_to_github.py --skill-name zotero-paper-import --commit-message "Add Zotero paper import skill"
 ```
 
-The script searches `C:\Users\Administrator\.codex\skills` and `C:\Users\Administrator\.agents\skills` by default, updates the backup repo, and can commit/push when called with `--commit --push`. Inspect `git diff` before committing when the repo already has unrelated changes.
+The script searches `C:\Users\Administrator\.codex\skills` and `C:\Users\Administrator\.agents\skills` by default, updates the backup repo, updates the Obsidian mirror, and can commit/push when called with `--commit --push`. Inspect `git diff` before committing when the repo already has unrelated changes.
 
 ## Safety Rules
 
@@ -80,3 +89,4 @@ The script searches `C:\Users\Administrator\.codex\skills` and `C:\Users\Adminis
 - Do not back up `.codex\skills\.system`; system skills are intentionally excluded from this repository.
 - Do not store secrets, API keys, cookies, Zotero databases, downloaded PDFs, or large generated files unless the user explicitly asks and the repo is intended for them.
 - If `git push` fails for credentials or network, leave the local commit in place and tell the user the exact command to retry.
+- If GitHub is unreachable, still update the Obsidian mirror so skills remain browsable locally.
