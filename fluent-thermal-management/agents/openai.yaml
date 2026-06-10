@@ -1,0 +1,4 @@
+interface:
+  display_name: "Fluent Thermal Management"
+  short_description: "Drive Fluent thermal design CFD"
+  default_prompt: "Use Fluent Thermal Management to plan, run, and report a heat transfer simulation in Ansys Fluent."

@@ -12,6 +12,7 @@ This repository stores user-installed Codex skills for reuse across machines.
 - `auto-backup-skills-to-github`
 - `interactive-learning`
 - `ansys-fluent-driver`
+- `fluent-thermal-management`
 - Shared reference files in `_shared`
 
 System skills from `.codex/skills/.system` are intentionally excluded because Codex provides them.
